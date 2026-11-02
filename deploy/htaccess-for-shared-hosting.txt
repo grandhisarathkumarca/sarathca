@@ -1,0 +1,30 @@
+# For Apache/cPanel shared hosting only. Upload the contents of `out/` to public_html,
+# then save this file there as `.htaccess`. Replace your-domain.in with the real domain.
+
+ErrorDocument 404 /404.html
+AddType text/vcard .vcf
+AddType image/svg+xml .svg
+DirectorySlash On
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Force HTTPS
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  # Redirect the bare domain to www (must match NEXT_PUBLIC_SITE_URL)
+  RewriteCond %{HTTP_HOST} ^your-domain\.in$ [NC]
+  RewriteRule ^ https://www.your-domain.in%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+  <FilesMatch "\.(js|css|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml text/plain application/xml
+</IfModule>
