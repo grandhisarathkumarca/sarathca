@@ -438,7 +438,7 @@ function FaqPreview() {
             Frequently asked questions
           </h2>
           <Link href="/resources/" className="mt-7 inline-flex items-center gap-2 font-medium text-navy">
-            <span className="link-underline">All FAQs &amp; courses</span>
+            <span className="link-underline">All FAQs</span>
             <ArrowRight aria-hidden className="h-4 w-4" />
           </Link>
         </Reveal>

@@ -102,15 +102,6 @@ export const principles = [
   },
 ];
 
-/** Short practical training courses (section 5 of the content pack). */
-export const courses = [
-  { title: "Tally Prime with GST", text: "Day-to-day accounting, GST invoicing and returns-ready data in Tally Prime." },
-  { title: "Income Tax Return Filing", text: "Choosing the right ITR form and filing returns on the e-filing portal." },
-  { title: "GST Practical", text: "Registration, GSTR-1 / GSTR-3B filing and input tax credit reconciliation." },
-  { title: "Payroll", text: "Salary processing with PF, ESI, Professional Tax and TDS on salary." },
-  { title: "MS Excel for Accountants", text: "Formulas, reconciliations and reports used in everyday accounting work." },
-];
-
 /** Official portals listed on the Resources page. */
 export const officialPortals = [
   { name: "Income Tax e-Filing Portal", href: "https://www.incometax.gov.in/", note: "Income Tax Department, Government of India" },

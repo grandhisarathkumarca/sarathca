@@ -48,11 +48,11 @@ Testimonials, client names or logos, team members, years-of-experience claims, s
 
 ## 8. October 2026 content-pack update — still to confirm or supply
 
-The site now follows *Sarath_Kumar_Associates_Website_Content-1.docx* (navy / royal-blue / gold theme, Poppins headings, query form, WhatsApp buttons, About, Courses & FAQs, Terms). The pack left these as placeholders, so they are **not** shown on the site:
+The site now follows *Sarath_Kumar_Associates_Website_Content-1.docx* (navy / royal-blue / gold theme, Poppins headings, query form, WhatsApp buttons, About, FAQs, Terms). The pack left these as placeholders, so they are **not** shown on the site:
 
 - Years of practice ("[X] years") — the site says "Established in 2022" instead.
 - Office hours, a second email address and a confirmed Google Maps pin (the contact-page map is located from the postal address).
-- Founder achievements ("Add 2–3 lines"), course batch dates and fees.
+- Founder achievements ("Add 2–3 lines").
 - Logo: the header, favicon and digital card now use the supplied **CA India** logo. Confirm the firm may use it under ICAI's guidelines.
 - Jurisdiction in the Terms page is "courts at Visakhapatnam" as in the pack. Narsipatnam now falls in Anakapalli district, so please confirm.
 
@@ -69,4 +69,6 @@ Needs setup before launch:
 - Old service URLs (e.g. `/services/income-tax/`, `/services/audit-assurance/`) no longer exist. If they were shared or indexed, add redirects on the host.
 - The pack's sample also lists FCRA registration and virtual CFO services, which section 7 above previously excluded; they are now included as the pack specifies — please confirm.
 
-- **Blogs removed (client request):** the Blogs section and its starter topics are no longer on the site; the menu item is now "Courses & FAQs".
+- **Blogs removed (client request):** the Blogs section and its starter topics are no longer on the site; the menu item is now "FAQs".
+
+- **Courses removed (client request):** the Courses section (Tally Prime with GST, ITR filing, GST practical, payroll, MS Excel) is no longer on the site; only FAQs and official portal links remain at `/resources/`.
