@@ -1,6 +1,5 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { ButtonLink } from "@/components/Button";
 import { CardShowcase } from "@/components/card/CardShowcase";
 import { ContactBand } from "@/components/ContactBand";
 import { PageHeader } from "@/components/PageHeader";
@@ -92,51 +91,6 @@ export default function AboutPage() {
                 </div>
               ))}
             </dl>
-          </Reveal>
-        </div>
-      </section>
-
-      <section aria-labelledby="profile-title" className="border-y border-line bg-white py-20 md:py-24">
-        <div className="container-site grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
-          <Reveal className="lg:col-span-5 lg:self-center">
-            <div className="relative mx-auto w-full max-w-[17rem] sm:max-w-[19rem] lg:max-w-[20rem]">
-              <div aria-hidden className="absolute -right-3 -top-3 bottom-3 left-3 border border-sage-300" />
-              <Reveal variant="mask" className="relative aspect-[4/5] overflow-hidden bg-navy-100">
-                <Portrait sizes="(min-width: 1024px) 20rem, (min-width: 640px) 19rem, 17rem" className="object-[50%_20%]" />
-              </Reveal>
-            </div>
-          </Reveal>
-          <Reveal className="lg:col-span-6 lg:col-start-7" delay={0.08}>
-            <p className="eyebrow">Our founder</p>
-            <h2 id="profile-title" className="mt-4 text-[2.1rem] md:text-[2.6rem]">
-              {proprietor.titledName}
-            </h2>
-            <p className="mt-3 text-[1.02rem] font-medium text-royal">{proprietor.tagline}</p>
-            <p className="mt-1.5 text-[0.96rem] text-ink-soft">
-              {proprietor.role}, {firm.name}, {firm.designation}
-            </p>
-            <div className="prose-site mt-8 text-[1.04rem] leading-relaxed">
-              <p>
-                {proprietor.titledName} is a member of the Institute of Chartered Accountants of India (ICAI),
-                Membership No. {proprietor.membershipNo}, and founded {firm.name} in {firm.established}. The firm
-                provides direct taxation, GST, audit and assurance, accounting, financial reporting and regulatory
-                compliance services for companies, firms, individuals and trusts.
-              </p>
-            </div>
-            <dl className="mt-8 grid grid-cols-3 border-y border-line text-center">
-              {proprietor.qualifications.split(", ").map((q, i) => (
-                <div key={q} className={`py-5 ${i > 0 ? "border-l border-line" : ""}`}>
-                  <dt className="sr-only">Qualification</dt>
-                  <dd className="font-serif text-[1.25rem] font-semibold text-navy">{q}</dd>
-                </div>
-              ))}
-            </dl>
-            <div className="mt-10 flex flex-wrap gap-3">
-              <ButtonLink href="/contact/">Contact the firm</ButtonLink>
-              <ButtonLink href="/digital-card/" variant="secondary">
-                Digital business card
-              </ButtonLink>
-            </div>
           </Reveal>
         </div>
       </section>
