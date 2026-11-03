@@ -91,6 +91,17 @@ The free plan has a monthly submission limit; check Web3Forms' current terms. To
 
 Netlify works the same way (build `npm run build`, publish `out`). `public/_headers` sets security and caching headers on both.
 
+### Vercel
+
+Vercel's free Hobby plan is for non-commercial use only, so a firm website needs the Pro plan; check Vercel's current terms.
+
+1. Push this project to a GitHub repository (or upload it with the Vercel CLI: `npx vercel`).
+2. Vercel dashboard → Add New → Project → import the repository. The **Next.js** preset is detected; leave the build command and output directory at their defaults.
+3. Under *Environment Variables*, add the variables from section 2 (at least `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`) for Production.
+4. Deploy, then add the domain under *Settings → Domains* and create the DNS records Vercel shows. HTTPS is issued automatically.
+
+If `NEXT_PUBLIC_SITE_URL` is added or changed after the first deploy, redeploy so the new value is built in. `vercel.json` sets the same security and caching headers as `public/_headers`.
+
 ### Alternative: cPanel / shared hosting (e.g. a domain + hosting bundle)
 
 1. Run `npm run build` locally with the production `.env.local`.
