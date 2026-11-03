@@ -58,7 +58,7 @@ export const phones: Phone[] = [
   { display: "+91 93911 85755", e164: "+919391185755" },
 ];
 
-export const email = "grandhisarathkumar@gmail.com";
+export const email = "contact@sarathca.in";
 
 /**
  * WhatsApp number confirmed by the client: +91 93911 85755. NEXT_PUBLIC_WHATSAPP_NUMBER can

@@ -15,7 +15,7 @@ Under ICAI's Code of Ethics and guidelines for members' websites, the proprietor
 - Firm name, "Chartered Accountants", established **2022**.
 - ICAI Firm Registration No. **024704S** and Membership No. **262952** (About page, homepage proprietor section, footer).
 - Address: D No. 24-6-41, Thotavaari Veedhi, Narsipatnam, Visakhapatnam District, Andhra Pradesh – 531116.
-- Email: grandhisarathkumar@gmail.com.
+- Email: contact@sarathca.in.
 - The **Directions** links run a Google Maps search for the address rather than a fixed map pin. Check that the result lands on the office; if not, supply a confirmed map link.
 
 ## 3. WhatsApp

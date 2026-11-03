@@ -72,7 +72,7 @@ The original portrait photo (the WhatsApp image in the project root) is never mo
 
 ## 5. Enquiry form (Web3Forms)
 
-1. Go to https://web3forms.com and create an access key using **grandhisarathkumar@gmail.com** (the key is tied to the inbox that receives submissions).
+1. Go to https://web3forms.com and create an access key using **contact@sarathca.in** (the key is tied to the inbox that receives submissions).
 2. Put the key in `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` on the host and rebuild. The key is designed to be public; it cannot be used to read submissions.
 3. Recommended in the Web3Forms dashboard: restrict submissions to the production domain, and enable their spam filtering. The form already uses a honeypot field and a minimum fill time.
 4. After launch, send a test enquiry from the live site and confirm it arrives (check the spam folder the first time).
