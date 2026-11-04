@@ -16,7 +16,7 @@ Under ICAI's Code of Ethics and guidelines for members' websites, the proprietor
 - ICAI Firm Registration No. **024704S** and Membership No. **262952** (About page, homepage proprietor section, footer).
 - Address: D No. 24-6-41, Thotavaari Veedhi, Narsipatnam, Visakhapatnam District, Andhra Pradesh – 531116.
 - Email: contact@sarathca.in.
-- The **Directions** links run a Google Maps search for the address rather than a fixed map pin. Check that the result lands on the office; if not, supply a confirmed map link.
+- The **Directions** links open the Google Maps pin supplied by the client (https://goo.gl/maps/2WosiJ3bRnwpUKY48). Check that it opens on the office from a phone and a computer. The map shown on the contact page is still located from the postal address.
 
 ## 3. WhatsApp
 
@@ -51,7 +51,7 @@ Testimonials, client names or logos, team members, years-of-experience claims, s
 The site now follows *Sarath_Kumar_Associates_Website_Content-1.docx* (navy / royal-blue / gold theme, Poppins headings, query form, WhatsApp buttons, About, FAQs, Terms). The pack left these as placeholders, so they are **not** shown on the site:
 
 - Years of practice ("[X] years") — the site says "Established in 2022" instead.
-- Office hours, a second email address and a confirmed Google Maps pin (the contact-page map is located from the postal address).
+- Office hours, a second email address and the coordinates of the Google Maps pin (the contact-page map is located from the postal address).
 - Founder achievements ("Add 2–3 lines").
 - Logo: the header, favicon and digital card now use the supplied **CA India** logo. Confirm the firm may use it under ICAI's guidelines.
 - Jurisdiction in the Terms page is "courts at Visakhapatnam" as in the pack. Narsipatnam now falls in Anakapalli district, so please confirm.

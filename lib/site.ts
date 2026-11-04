@@ -72,10 +72,8 @@ export const whatsappUrl = `https://wa.me/${whatsappNumber}`;
 export const whatsappGreeting = "Hello! I'm interested in your CA Services. Can you help me?";
 export const whatsappChatUrl = `${whatsappUrl}?text=${encodeURIComponent(whatsappGreeting)}`;
 
-/** Directions link built from the verified postal address (not a guessed map pin). */
-export const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  `${address.street}, ${address.locality}, ${address.region} ${address.postalCode}`,
-)}`;
+/** Google Maps pin for the office, supplied by the client. */
+export const directionsUrl = "https://goo.gl/maps/2WosiJ3bRnwpUKY48";
 
 export const portrait = {
   basePath: "/images/grandhi-sarath-kumar",
