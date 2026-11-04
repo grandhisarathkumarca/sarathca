@@ -34,8 +34,7 @@ function validate(data: Record<Fields, string>): Errors {
   if (data.city.trim().length < 2) errors.city = "Please enter your city.";
   if (data.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email.trim()))
     errors.email = "Please enter a valid email address, or leave this blank.";
-  if (data.message.trim().length < 10) errors.message = "Please describe your query in a sentence or two.";
-  else if (data.message.length > 3000) errors.message = "Please keep the query under 3,000 characters.";
+  if (data.message.length > 3000) errors.message = "Please keep the query under 3,000 characters.";
   return errors;
 }
 
@@ -80,7 +79,7 @@ export function ContactForm({ compact = false, service: serviceSlug, topic }: Co
       `City: ${data.city.trim()}`,
       `Service: ${topic ? `${service} – ${topic}` : service}`,
       ...(data.email.trim() ? [`Email: ${data.email.trim()}`] : []),
-      `Query: ${data.message.trim()}`,
+      ...(data.message.trim() ? [`Query: ${data.message.trim()}`] : []),
     ];
     const url = `${whatsappUrl}?text=${encodeURIComponent(lines.join("\n"))}`;
     window.open(url, "_blank", "noopener,noreferrer");
@@ -209,8 +208,8 @@ export function ContactForm({ compact = false, service: serviceSlug, topic }: Co
         )}
       </div>
       <div>
-        {label("message", "Describe your Query")}
-        <textarea rows={compact ? 3 : 5} required maxLength={3000} {...field("message")} />
+        {label("message", "Describe your Query", false)}
+        <textarea rows={compact ? 3 : 5} maxLength={3000} {...field("message")} />
         {error("message")}
       </div>
 
