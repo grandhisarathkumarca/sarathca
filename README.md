@@ -5,7 +5,7 @@ Website and digital business card for **Sarath Kumar & Associates, Chartered Acc
 - **Stack:** Next.js 16 (App Router, static export), TypeScript, Tailwind CSS 4, Lucide icons, `qrcode` (build-time only).
 - **Output:** a fully static site in `out/` — no server, database or CMS. It can be hosted on Cloudflare Pages, Netlify or ordinary cPanel shared hosting.
 - **Motion:** CSS animations plus one shared IntersectionObserver (`components/RevealObserver.tsx`) — word-by-word hero reveal, image wipes, staggered lists, a practice-area marquee, scroll progress and parallax (where the browser supports scroll-driven animations). The digital card (`components/card/ElevatedCard.tsx`) tilts towards the pointer, catches a glare and flips to its QR side. Everything is disabled for visitors who prefer reduced motion, and content stays visible without JavaScript.
-- **Enquiry form:** delivered to the firm's inbox through [Web3Forms](https://web3forms.com).
+- **Enquiry form:** opens WhatsApp with the query pre-filled for the firm's number; the visitor presses send.
 
 Before launch, read [`CONTENT-APPROVAL.md`](CONTENT-APPROVAL.md) — several items need the proprietor's sign-off.
 
@@ -36,8 +36,7 @@ Set these in `.env.local` for local work **and** in the hosting provider's build
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Yes, for launch | Production origin, e.g. `https://www.example.in` (no trailing slash). Used for canonical URLs, sitemap, Open Graph, the vCard website field and the **QR code**. Until it is set, the card page hides the QR code in production builds and the build prints a warning. |
-| `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` | Yes, for the form | Web3Forms access key. Without it the form validates input but tells visitors to call or email instead — it never pretends to succeed. |
-| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Optional | Adds a WhatsApp button to the digital card. Set **only** after the proprietor confirms which number uses WhatsApp. Digits only with country code, e.g. `917997670238`. |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Optional | Overrides the WhatsApp number used by the query form and WhatsApp buttons (default is in `lib/site.ts`). Digits only with country code, e.g. `917997670238`. |
 
 ## 3. Where to edit content
 
@@ -70,14 +69,11 @@ The original portrait photo (the WhatsApp image in the project root) is never mo
 | `/privacy-policy/`, `/disclaimer/` | Legal drafts |
 | `/sitemap.xml`, `/robots.txt`, `/og-image.png` | SEO files, generated at build time |
 
-## 5. Enquiry form (Web3Forms)
+## 5. Enquiry form (WhatsApp)
 
-1. Go to https://web3forms.com and create an access key using **contact@sarathca.in** (the key is tied to the inbox that receives submissions).
-2. Put the key in `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` on the host and rebuild. The key is designed to be public; it cannot be used to read submissions.
-3. Recommended in the Web3Forms dashboard: restrict submissions to the production domain, and enable their spam filtering. The form already uses a honeypot field and a minimum fill time.
-4. After launch, send a test enquiry from the live site and confirm it arrives (check the spam folder the first time).
+"Send on WhatsApp" opens a chat with the number in `whatsappNumber` (`lib/site.ts`), with the visitor's details already typed in. The message reaches the firm only when the visitor presses send in WhatsApp, and they need WhatsApp on their phone or WhatsApp Web on a computer. No account or key is needed.
 
-The free plan has a monthly submission limit; check Web3Forms' current terms. To switch providers later, only `components/ContactForm.tsx` needs to change.
+After launch, send a test query from the live site on a phone and on a computer, and confirm it arrives on the firm's WhatsApp.
 
 ## 6. Deployment
 
@@ -86,7 +82,7 @@ The free plan has a monthly submission limit; check Web3Forms' current terms. To
 1. Push this project to a GitHub repository owned by the firm (or by you, transferred at handover).
 2. Cloudflare dashboard → Workers & Pages → Create → Pages → connect the repository.
 3. Build settings: **Framework preset** none, **Build command** `npm run build`, **Output directory** `out`, environment variable `NODE_VERSION=20` (or newer).
-4. Add the three environment variables from section 2.
+4. Add the environment variables from section 2.
 5. Deploy, then add the custom domain under the project's *Custom domains* tab. HTTPS certificates are issued automatically.
 
 Netlify works the same way (build `npm run build`, publish `out`). `public/_headers` sets security and caching headers on both.
@@ -97,7 +93,7 @@ Vercel's free Hobby plan is for non-commercial use only, so a firm website needs
 
 1. Push this project to a GitHub repository (or upload it with the Vercel CLI: `npx vercel`).
 2. Vercel dashboard → Add New → Project → import the repository. The **Next.js** preset is detected; leave the build command and output directory at their defaults.
-3. Under *Environment Variables*, add the variables from section 2 (at least `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`) for Production.
+3. Under *Environment Variables*, add the variables from section 2 (at least `NEXT_PUBLIC_SITE_URL`) for Production.
 4. Deploy, then add the domain under *Settings → Domains* and create the DNS records Vercel shows. HTTPS is issued automatically.
 
 If `NEXT_PUBLIC_SITE_URL` is added or changed after the first deploy, redeploy so the new value is built in. `vercel.json` sets the same security and caching headers as `public/_headers`.
@@ -142,7 +138,7 @@ Register the domain in the firm's name with the firm's email as the registrant c
 
 - **Code and content:** the Git repository is the backup. Keep it in an account the firm controls; the hosting can be rebuilt from it in minutes.
 - **Built site:** keep a zip of the latest `out/` folder with the handover documents.
-- **Enquiries:** stored only in the firm's email inbox (Web3Forms does not act as the archive).
+- **Enquiries:** stored only in the firm's WhatsApp chats; keep WhatsApp chat backup turned on.
 - **Recovery:** if hosting is lost, create a new Pages/Netlify project from the repository (section 6) and repoint DNS.
 
 ## 11. Handover checklist
@@ -151,7 +147,7 @@ Register the domain in the firm's name with the firm's email as the registrant c
 - [ ] Domain registered in the firm's name; registrar login handed over; auto-renew on.
 - [ ] Hosting account owned by (or transferred to) the firm; login handed over.
 - [ ] Git repository owned by (or transferred to) the firm.
-- [ ] Web3Forms account created with the firm's email; test enquiry received.
+- [ ] Test query sent from the live site and received on the firm's WhatsApp.
 - [ ] `NEXT_PUBLIC_SITE_URL` set; QR code on `/digital-card/` scanned and opens the live card.
 - [ ] "Save contact" tested on an iPhone and an Android phone.
 - [ ] Search Console verified and sitemap submitted.

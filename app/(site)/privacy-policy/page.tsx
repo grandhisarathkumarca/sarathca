@@ -48,8 +48,8 @@ export default function PrivacyPolicyPage() {
       <h2>Service providers</h2>
       <ul>
         <li>
-          <strong>Form delivery:</strong> enquiries are transmitted to the firm&rsquo;s email inbox through Web3Forms, a
-          third-party form-delivery service.
+          <strong>WhatsApp:</strong> the query form opens WhatsApp with your details filled in. They are sent to the firm
+          only when you press send, and are then handled by WhatsApp, a service of Meta.
         </li>
         <li>
           <strong>Email:</strong> enquiries are received in the firm&rsquo;s email account, which is hosted by an email

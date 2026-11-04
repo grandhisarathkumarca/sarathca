@@ -1,24 +1,19 @@
 "use client";
 
-import { CircleAlert, CircleCheck, LoaderCircle, MessageCircle } from "lucide-react";
+import { CircleAlert, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useId, useRef, useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 import { services } from "@/lib/services";
-import { email as firmEmail, firm, phones, whatsappUrl } from "@/lib/site";
+import { phones, whatsappDisplay, whatsappUrl } from "@/lib/site";
 
 /**
  * Query form ("Talk to a Chartered Accountant"), per the Query Form section of the content pack.
- * Submissions are delivered to the firm's inbox through Web3Forms (https://web3forms.com), which
- * works with a fully static site. The access key is public by design and is configured with
- * NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY.
+ * Submitting opens WhatsApp with the query pre-filled for the firm's number. The visitor presses
+ * send in WhatsApp; nothing reaches the firm until they do.
  */
-const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
-const ENDPOINT = "https://api.web3forms.com/submit";
-
 type Fields = "name" | "phone" | "city" | "service" | "email" | "message";
 type Errors = Partial<Record<Fields, string>>;
-type State = { status: "idle" | "submitting" } | { status: "success"; summary: string } | { status: "error"; message: string };
 
 const FIELDS: Fields[] = ["name", "phone", "city", "service", "email", "message"];
 const OTHER = "Other / not sure";
@@ -58,13 +53,12 @@ export function ContactForm({ compact = false, service: serviceSlug, topic }: Co
   const searchParams = useSearchParams();
   const preselected =
     services.find((s) => s.slug === (serviceSlug ?? searchParams.get("service")))?.enquiryLabel ?? "";
-  const [state, setState] = useState<State>({ status: "idle" });
+  const [sentUrl, setSentUrl] = useState<string | null>(null);
   const [errors, setErrors] = useState<Errors>({});
-  const startedAt = useRef<number>(0);
 
-  const id = (name: Fields | "botcheck") => `${uid}-${name}`;
+  const id = (name: Fields) => `${uid}-${name}`;
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const fd = new FormData(form);
@@ -78,65 +72,31 @@ export function ContactForm({ compact = false, service: serviceSlug, topic }: Co
       return;
     }
 
-    // Spam checks: hidden honeypot field and a minimum fill time.
-    if (fd.get("botcheck") || (startedAt.current && Date.now() - startedAt.current < 2500)) {
-      setState({ status: "error", message: "Your query could not be sent. Please try again in a moment, or call the firm." });
-      return;
-    }
-
-    if (!ACCESS_KEY) {
-      setState({
-        status: "error",
-        message: `Online queries are not yet connected. Please call ${phones[0].display}, WhatsApp the firm or email ${firmEmail}.`,
-      });
-      return;
-    }
-
-    const name = data.name.trim();
-    const phone = normalisePhone(data.phone) ?? data.phone.trim();
     const service = data.service || OTHER;
-    setState({ status: "submitting" });
-    try {
-      const response = await fetch(ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: ACCESS_KEY,
-          subject: `New Query – ${name} – ${topic ?? service}`,
-          from_name: `${firm.name} website`,
-          replyto: data.email.trim() || undefined,
-          Name: name,
-          Phone: `+91 ${phone}`,
-          "Call now": `tel:+91${phone}`,
-          City: data.city.trim(),
-          "Service needed": topic ? `${service} – ${topic}` : service,
-          Email: data.email.trim() || "—",
-          Query: data.message.trim(),
-        }),
-      });
-      const result = (await response.json().catch(() => null)) as { success?: boolean; message?: string } | null;
-      if (!response.ok || !result?.success) throw new Error(result?.message || `HTTP ${response.status}`);
-      setState({
-        status: "success",
-        summary: `New query from the website\nName: ${name}\nPhone: +91 ${phone}\nCity: ${data.city.trim()}\nService: ${topic ? `${service} – ${topic}` : service}\nQuery: ${data.message.trim()}`,
-      });
-      form.reset();
-    } catch {
-      setState({
-        status: "error",
-        message: `Your query could not be sent. Please try again, or contact the firm at ${phones[0].display} or ${firmEmail}.`,
-      });
-    }
+    const lines = [
+      "New query from the website",
+      `Name: ${data.name.trim()}`,
+      `Phone: +91 ${normalisePhone(data.phone)}`,
+      `City: ${data.city.trim()}`,
+      `Service: ${topic ? `${service} – ${topic}` : service}`,
+      ...(data.email.trim() ? [`Email: ${data.email.trim()}`] : []),
+      `Query: ${data.message.trim()}`,
+    ];
+    const url = `${whatsappUrl}?text=${encodeURIComponent(lines.join("\n"))}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+    setSentUrl(url);
+    form.reset();
   };
 
-  if (state.status === "success") {
+  // A blocked pop-up can't be detected with noopener, so the link is always offered here too.
+  if (sentUrl) {
     return (
       <div role="status" aria-live="polite" className="rounded-[10px] border border-whatsapp/30 bg-whatsapp/5 p-6 sm:p-8">
-        <CircleCheck aria-hidden className="h-9 w-9 text-whatsapp-700" strokeWidth={1.6} />
-        <h3 className="mt-4 text-[1.35rem]">Thank you! We will contact you shortly.</h3>
+        <MessageCircle aria-hidden className="h-9 w-9 text-whatsapp-700" strokeWidth={1.6} />
+        <h3 className="mt-4 text-[1.35rem]">One more step: press send in WhatsApp</h3>
         <p className="mt-3 text-[0.96rem] leading-relaxed">
-          Your query has been sent to the firm. For a faster response you can also send the same details on WhatsApp,
-          or call{" "}
+          Your query is ready in WhatsApp, addressed to {whatsappDisplay}. It reaches the firm once you press send. If
+          WhatsApp did not open, use the button below or call{" "}
           <a href={`tel:${phones[0].e164}`} className="font-medium text-navy underline underline-offset-2">
             {phones[0].display}
           </a>
@@ -144,18 +104,18 @@ export function ContactForm({ compact = false, service: serviceSlug, topic }: Co
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <a
-            href={`${whatsappUrl}?text=${encodeURIComponent(state.summary)}`}
+            href={sentUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex min-h-11 items-center gap-2 rounded-full bg-whatsapp px-5 text-[0.95rem] font-semibold text-white hover:bg-whatsapp-700"
           >
             <MessageCircle aria-hidden className="h-4 w-4" />
-            Send on WhatsApp
+            Open WhatsApp
             <span className="sr-only"> (opens in a new tab)</span>
           </a>
           <button
             type="button"
-            onClick={() => setState({ status: "idle" })}
+            onClick={() => setSentUrl(null)}
             className="min-h-11 rounded-full px-4 text-[0.95rem] font-medium text-navy underline-offset-4 hover:underline"
           >
             Send another query
@@ -165,7 +125,6 @@ export function ContactForm({ compact = false, service: serviceSlug, topic }: Co
     );
   }
 
-  const submitting = state.status === "submitting";
   const inputClass = `block w-full rounded-[8px] border bg-paper-200 px-4 text-[1rem] text-navy placeholder:text-ink-soft/80 transition-[border-color,box-shadow,background-color] duration-200 focus:border-royal focus:bg-white focus:outline-none focus:ring-2 focus:ring-royal/20 ${
     compact ? "mt-1 py-2.5" : "mt-2 py-3"
   }`;
@@ -175,9 +134,6 @@ export function ContactForm({ compact = false, service: serviceSlug, topic }: Co
     "aria-invalid": errors[name] ? true : undefined,
     "aria-describedby": errors[name] ? `${id(name)}-error` : undefined,
     className: `${inputClass} ${errors[name] ? "border-red-700" : "border-line-strong"}`,
-    onFocus: () => {
-      if (!startedAt.current) startedAt.current = Date.now();
-    },
   });
   const error = (name: Fields) =>
     errors[name] ? (
@@ -204,10 +160,7 @@ export function ContactForm({ compact = false, service: serviceSlug, topic }: Co
     <form
       noValidate
       onSubmit={onSubmit}
-      onReset={() => {
-        setErrors({});
-        if (state.status === "error") setState({ status: "idle" });
-      }}
+      onReset={() => setErrors({})}
       aria-describedby={`${uid}-privacy`}
       className={`relative ${compact ? "space-y-3" : "space-y-5"}`}
     >
@@ -261,32 +214,17 @@ export function ContactForm({ compact = false, service: serviceSlug, topic }: Co
         {error("message")}
       </div>
 
-      {/* Honeypot: hidden from people, often filled in by bots. */}
-      <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
-        <label htmlFor={id("botcheck")}>Leave this field empty</label>
-        <input type="text" id={id("botcheck")} name="botcheck" tabIndex={-1} autoComplete="off" />
-      </div>
-
-      {state.status === "error" && (
-        <p role="alert" className="flex gap-2 rounded-[8px] border-l-2 border-red-700 bg-red-50 px-4 py-3 text-[0.9rem] text-red-900">
-          <CircleAlert aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />
-          {state.message}
-        </p>
-      )}
-
       <div className="flex gap-3 pt-1">
         <button
           type="submit"
-          disabled={submitting}
-          className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-gold px-7 text-[0.98rem] font-semibold text-navy shadow-[0_10px_24px_-14px_rgba(212,160,23,0.9)] transition-colors duration-300 hover:bg-gold-500 active:bg-gold-700 disabled:cursor-wait disabled:opacity-70"
+          className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-gold px-7 text-[0.98rem] font-semibold text-navy shadow-[0_10px_24px_-14px_rgba(212,160,23,0.9)] transition-colors duration-300 hover:bg-gold-500 active:bg-gold-700"
         >
-          {submitting && <LoaderCircle aria-hidden className="h-4 w-4 animate-spin" />}
-          {submitting ? "Sending…" : "Send Message"}
+          <MessageCircle aria-hidden className="h-4 w-4" />
+          Send on WhatsApp
         </button>
         <button
           type="reset"
-          disabled={submitting}
-          className="inline-flex min-h-12 items-center justify-center rounded-full border border-line-strong bg-white px-6 text-[0.95rem] font-medium text-ink transition-colors duration-300 hover:border-navy hover:text-navy disabled:opacity-60"
+          className="inline-flex min-h-12 items-center justify-center rounded-full border border-line-strong bg-white px-6 text-[0.95rem] font-medium text-ink transition-colors duration-300 hover:border-navy hover:text-navy"
         >
           Clear
         </button>

@@ -39,7 +39,7 @@ These follow the brief's facts and qualifiers but are new wording:
 
 ## 6. Legal drafts
 
-- `/privacy-policy/` and `/disclaimer/` are initial drafts based on how the site actually works: no cookies or analytics, form delivered via Web3Forms, Google Maps links, and server logs at the host. Each page shows a "Draft" notice until `legalPagesApproved` in `lib/site.ts` is set to `true`.
+- `/privacy-policy/` and `/disclaimer/` are initial drafts based on how the site actually works: no cookies or analytics, form delivered via WhatsApp, Google Maps links, and server logs at the host. Each page shows a "Draft" notice until `legalPagesApproved` in `lib/site.ts` is set to `true`.
 - Consider whether the firm wants a click-through disclaimer on first visit, which some CA firms use. It is not included, to keep the site fast and unobtrusive.
 
 ## 7. Deliberately not included
@@ -58,7 +58,7 @@ The site now follows *Sarath_Kumar_Associates_Website_Content-1.docx* (navy / ro
 
 Needs setup before launch:
 
-- **Query form delivery:** set `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`. Until then the form shows a "call / WhatsApp / email" fallback message. Email subject: "New Query – [Name] – [Service]".
+- **Query form delivery:** the form opens WhatsApp with the query pre-filled for +91 93911 85755; the visitor presses send. Please confirm this is the right number.
 - **Instant WhatsApp alert, auto-reply SMS, query dashboard and reCAPTCHA** (from the Quick Response Alert section) need a backend or automation service (e.g. WhatsApp Business API). The static site can't send these by itself. For now, after a successful submission the visitor gets a "Send on WhatsApp" button pre-filled with their query.
 
 ## 9. Services restructured to the content pack (sections 6–15)
